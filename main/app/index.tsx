@@ -6,6 +6,7 @@ import OnBoarding from "./misc/on-boarding";
 
 const App = () => {
   const isFirstLaunch = useFirstLaunch();
+  // const isFirstLaunch = true;
   const router = useRouter();
 
   useEffect(() => {

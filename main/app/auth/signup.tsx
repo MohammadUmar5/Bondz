@@ -1,4 +1,5 @@
-import { checkUserProfileExists, logIn } from "@/services/auth";
+import { BasicWrapper, EmailSentModal } from "@/components";
+import { signUp } from "@/services/auth";
 import { Entypo } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
@@ -6,7 +7,6 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Image,
   Pressable,
   Text,
   TextInput,
@@ -14,59 +14,72 @@ import {
   View,
 } from "react-native";
 
-const Login = () => {
+const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
-  const [forgotModalVisible, setForgotModalVisible] = useState(false);
-
   const router = useRouter();
 
-  const handleLogin = async () => {
-    setLoading(true);
-    setFeedback(null);
-
-    const result = await logIn(email.trim(), password);
-
-    setLoading(false);
-    setFeedback(result.message);
-
-    if (result.success && result.isUserEmailVerified) {
-      const hasProfile = await checkUserProfileExists();
-      if (hasProfile) {
-        router.replace("/home");
-      } else {
-        router.replace("/auth/profile-setup");
-      }
+  const handleSignUp = async () => {
+    // Validate email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailRegex.test(email)) {
+      setFeedback("Please enter a valid email!");
+      return;
     }
+
+    // Validate password match
+    if (password !== confirmPassword) {
+      setFeedback("Password do not match");
+      return;
+    }
+
+    // Check if password is strong enough (optional)
+    if (password.length < 6) {
+      setFeedback("Password should be at least 6 characters long!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const { success, message } = await signUp(email, password);
+
+      setLoading(false);
+
+      if (success) {
+        setModalVisible(true);
+      } else {
+        setFeedback(message);
+      }
+    } catch (error) {
+      setFeedback("Something went wrong. Please try again.");
+    }
+  };
+
+  const handleOkButton = () => {
+    setModalVisible(false);
   };
 
   return (
     <View>
-      {/* Logo */}
-      <View className="w-full flex items-center mb-4">
-        <Image
-          source={require("@/assets/images/icon.png")}
-          className="w-20 h-20"
-          resizeMode="contain"
-        />
-      </View>
-
       {/* Header Text */}
       <View className="w-full flex items-center mb-6">
-        <Text className="text-[#312170] font-semibold text-4xl">
-          Hey there 👋
+        <Text className="text-[#312170] font-semibold text-5xl">
+          Welcome! 🌱
         </Text>
-        <Text className="text-[#312170] text-lg mt-2 text-center">
-          We've missed you. Let’s pick up where we left off 💜
+        <Text className="text-[#312170] text-2xl mt-2 text-center">
+          Let's get ypu signed up
         </Text>
       </View>
 
       {/* Inputs Container */}
       <View
-        className="w-full h-60 rounded-3xl overflow-hidden mb-4"
+        className="w-full h-80 rounded-3xl overflow-hidden mb-4"
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.15)",
           borderColor: "rgba(255, 255, 255, 0.3)",
@@ -81,11 +94,10 @@ const Login = () => {
           {/* Email */}
           <Text className="self-start text-gray-700 text-base mb-1">Email</Text>
           <TextInput
+            placeholder="Enter your email"
             value={email}
             onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            placeholder="Enter your email"
+            placeholderTextColor="white"
             className="w-full text-[#312170] placeholder:text-gray-300 text-xl bg-white/10 rounded-xl px-4 py-2 mb-4"
           />
 
@@ -98,9 +110,9 @@ const Login = () => {
               placeholder="Password"
               value={password}
               onChangeText={setPassword}
+              placeholderTextColor="white"
               className="flex-1 text-[#312170] placeholder:text-gray-300 text-xl"
               secureTextEntry={!showPassword}
-              autoCapitalize="none"
             />
             <Pressable onPress={() => setShowPassword(!showPassword)}>
               <Entypo
@@ -111,14 +123,27 @@ const Login = () => {
             </Pressable>
           </View>
 
-          {/* Forgot Password Link */}
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => setForgotModalVisible(true)}
-            className="w-full flex items-end"
-          >
-            <Text className="text-[#312170]">Forgot Password?</Text>
-          </TouchableOpacity>
+          {/* Confirm Password */}
+          <Text className="self-start text-gray-700 text-base mb-1">
+            Confirm Password
+          </Text>
+          <View className="w-full flex-row items-center bg-white/10 rounded-xl px-4 py-2">
+            <TextInput
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholderTextColor="white"
+              className="flex-1 text-[#312170] placeholder:text-gray-300 text-xl"
+              secureTextEntry={!showPassword}
+            />
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Entypo
+                name={showPassword ? "eye-with-line" : "eye"}
+                size={22}
+                color="#312170"
+              />
+            </Pressable>
+          </View>
         </BlurView>
       </View>
 
@@ -127,7 +152,7 @@ const Login = () => {
         <Text className="text-center mb-2 text-[#312170]">{feedback}</Text>
       )}
 
-      {/* Login Button */}
+      {/* Sign Up Button */}
       <LinearGradient
         colors={["#b6a8ff", "#9486f0"]}
         start={{ x: 0, y: 0 }}
@@ -137,30 +162,38 @@ const Login = () => {
         <Pressable
           android_ripple={{ color: "#d3cfff" }}
           className="w-full h-full flex items-center justify-center"
-          onPress={handleLogin}
+          onPress={handleSignUp}
         >
           {loading ? (
             <ActivityIndicator size="small" color="#fff" />
           ) : (
-            <Text className="text-2xl text-white text-center">Login</Text>
+            <Text className="text-2xl text-white text-center">Signup</Text>
           )}
         </Pressable>
       </LinearGradient>
 
-      {/* Already Have an Account? Sign Up Link */}
+      {/* Already Have an Account? Login Link */}
       <View className="w-full flex flex-row items-center justify-center mt-6">
-        <Text className="text-[#312170cb]">Don't have an account? </Text>
+        <Text className="text-[#312170cb]">Already have an account? </Text>
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            router.replace("/auth/signup");
+            router.replace("/auth/login");
           }}
         >
-          <Text className="text-[#312170]">Sign Up</Text>
+          <Text className="text-[#312170]">Log In</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Email Sent Modal */}
+      <EmailSentModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleOk={handleOkButton}
+      />
     </View>
   );
 };
 
-export default Login;
+const WrappedOnSignup = BasicWrapper(Signup);
+export default () => <WrappedOnSignup allowGuest />;

@@ -16,7 +16,7 @@ const ThemeContext = createContext<{
   ambientSounds: boolean;
   setAmbientSounds: (enabled: boolean) => void;
 }>({
-  theme: "joy",
+  theme: "default",
   setTheme: () => {},
   ambientSounds: false,
   setAmbientSounds: () => {},
@@ -27,7 +27,7 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>("sorrow");
+  const [theme, setThemeState] = useState<Theme>("default");
   const [ambientSounds, setAmbientSoundsState] = useState<boolean>(false);
   const [loaded, setLoaded] = useState(false); // Prevent overwrite on startup
 

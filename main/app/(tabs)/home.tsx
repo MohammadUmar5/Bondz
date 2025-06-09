@@ -1,11 +1,18 @@
+import { BasicWrapper } from "@/components";
+import { Colors } from "@/constants/Colors";
 import { useAuth } from "@/contexts/AuthProvider";
+import { useTheme } from "@/contexts/ThemeProvider";
 import { Text, View } from "react-native";
 
-export default function Home() {
+function Home() {
   const { isLoggedIn } = useAuth();
+  const { theme } = useTheme();
 
   return (
-    <View className="bg-blue-700 flex-1 items-center justify-center">
+    <View
+      style={{ backgroundColor: Colors[theme].bg }}
+      className="flex-1 items-center justify-center"
+    >
       {isLoggedIn ? (
         <Text className="bg-white">LoggedIn</Text>
       ) : (
@@ -14,3 +21,5 @@ export default function Home() {
     </View>
   );
 }
+
+export default BasicWrapper(Home);

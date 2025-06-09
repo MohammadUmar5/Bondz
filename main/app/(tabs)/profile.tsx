@@ -1,9 +1,12 @@
+import { BasicWrapper } from "@/components";
 import { Text, View } from "react-native";
 
-export default function Profile() {
+function Profile() {
   return (
-    <View className="bg-orange-700 flex-1 items-center justify-center">
+    <View className="flex-1 items-center justify-start">
       <Text className="bg-white">Profile</Text>
     </View>
   );
 }
+
+export default BasicWrapper(Profile);

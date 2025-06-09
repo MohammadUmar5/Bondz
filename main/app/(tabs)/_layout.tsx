@@ -1,9 +1,11 @@
+import { TabBar } from "@/components";
 import { Tabs } from "expo-router";
 import React from "react";
 
 export default function TabLayout() {
   return (
     <Tabs
+      tabBar={(props) => <TabBar {...props} />}
       screenOptions={{
         headerTitleAlign: "left",
         headerShown: false,
@@ -17,9 +19,9 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="collection"
+        name="echoes"
         options={{
-          title: "Collection",
+          title: "Echoes",
         }}
       />
 

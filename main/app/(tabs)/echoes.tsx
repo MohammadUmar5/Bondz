@@ -1,12 +1,12 @@
 import { BasicWrapper } from "@/components";
 import { Text, View } from "react-native";
 
-function Memories() {
+function Echoes() {
   return (
     <View className="flex-1 items-center justify-start">
-      <Text className="bg-white">Memories</Text>
+      <Text className="bg-white">Echoes</Text>
     </View>
   );
 }
 
-export default BasicWrapper(Memories);
+export default BasicWrapper(Echoes);

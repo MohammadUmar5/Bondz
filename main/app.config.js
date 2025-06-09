@@ -4,7 +4,7 @@ export default {
     slug: "bondz",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/images/icon.png",
+    icon: "./assets/logos/app_icon.png",
     scheme: "bondz",
     deepLinking: true,
     userInterfaceStyle: "automatic",
@@ -19,11 +19,11 @@ export default {
       package: "com.bondz",
       playStoreUrl: "https://play.google.com/store/apps/details?id=com.bondz",
       adaptiveIcon: {
-        foregroundImage: "./assets/images/icon.png",
+        foregroundImage: "./assets/logos/app_icon.png",
         backgroundColor: "#ffffff",
       },
       splash: {
-        image: "./assets/images/icon.png",
+        image: "./assets/logos/app_icon.png",
         resizeMode: "contain",
         backgroundColor: "#ffffff",
       },
@@ -32,7 +32,7 @@ export default {
     web: {
       bundler: "metro",
       output: "static",
-      favicon: "./assets/images/icon.png",
+      favicon: "./assets/logos/app_icon.png",
     },
 
     plugins: ["expo-router"],

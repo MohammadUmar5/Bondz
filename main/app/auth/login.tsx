@@ -1,3 +1,4 @@
+import { BasicWrapper } from "@/components";
 import { checkUserProfileExists, logIn } from "@/services/auth";
 import { Entypo } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
@@ -6,7 +7,6 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Image,
   Pressable,
   Text,
   TextInput,
@@ -45,15 +45,6 @@ const Login = () => {
 
   return (
     <View>
-      {/* Logo */}
-      <View className="w-full flex items-center mb-4">
-        <Image
-          source={require("@/assets/images/icon.png")}
-          className="w-20 h-20"
-          resizeMode="contain"
-        />
-      </View>
-
       {/* Header Text */}
       <View className="w-full flex items-center mb-6">
         <Text className="text-[#312170] font-semibold text-4xl">
@@ -163,4 +154,5 @@ const Login = () => {
   );
 };
 
-export default Login;
+const WrappedOnLogin = BasicWrapper(Login);
+export default () => <WrappedOnLogin allowGuest />;
