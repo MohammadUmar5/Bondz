@@ -33,9 +33,9 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="profile"
+        name="journal"
         options={{
-          title: "Profile",
+          title: "Journal",
         }}
       />
     </Tabs>
