@@ -1,11 +1,36 @@
+import React, { useState } from "react";
 import { BasicWrapper } from "@/components";
-import { Text, View } from "react-native";
+import { MemoriesGrid, Memory, mockMemories } from "@/components/memories/MemoriesGrid";
+import { MemoryModal } from "@/components/memories/MemoryModal";
 
 function Memories() {
+  const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  const openMemory = (memory: Memory, index: number) => {
+    setSelectedMemory(memory);
+    setSelectedIndex(index);
+  };
+
+  const closeMemory = () => {
+    setSelectedMemory(null);
+  };
+
+  const handleIndexChange = (index: number) => {
+    setSelectedIndex(index);
+    setSelectedMemory(mockMemories[index]);
+  };
+
   return (
-    <View className="flex-1 items-center justify-start">
-      <Text className="bg-white">Memories</Text>
-    </View>
+    <>
+      <MemoriesGrid onMemoryPress={openMemory} />
+      <MemoryModal
+        selectedMemory={selectedMemory}
+        selectedIndex={selectedIndex}
+        onClose={closeMemory}
+        onIndexChange={handleIndexChange}
+      />
+    </>
   );
 }
 

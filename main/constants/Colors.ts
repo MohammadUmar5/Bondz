@@ -1,7 +1,7 @@
 export const Colors = {
   default: {
     accent: "#FF6F61",
-    bg: "#1A1A24",
+    bg: "#000",
     cardBg: "#1A1A24",
     textPrimary: "#FFFFFF",
     textSecondary: "#A0A0A8",
@@ -12,7 +12,7 @@ export const Colors = {
     accent: "#ffffff",
     bg: "#ff00ff",
     cardBg: "#f3f3f3",
-    textPrimary: "#FFFFFF",
+    textPrimary: "pink",
     textSecondary: "#A0A0A8",
     tabBarColor: "#1F2937",
     tabBarBorderColor: "#374151",
