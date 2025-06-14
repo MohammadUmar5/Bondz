@@ -3,7 +3,13 @@ import { BasicWrapper, SlidesFlatList } from "@/components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
-import { FlatList, Pressable, Text } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const slides = [
@@ -86,23 +92,46 @@ const OnBoarding = () => {
         flatListRef={flatListRef}
       />
 
-      {/* Continue Button */}
-      <LinearGradient
-        colors={["#b6a8ff", "#9486f0"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        className="rounded-3xl h-12 overflow-hidden mt-6 w-1/2"
-      >
-        <Pressable
-          android_ripple={{ color: "#d3cfff" }}
-          className="w-full h-full flex items-center justify-center"
-          onPress={handleSkipOrContinue}
+      {/* Button */}
+      {currentIndex === slides.length - 1 ? (
+        <View className="bg-gray-500 flex flex-row items-center justify-between w-2/3 mt-6 overflow-hidden rounded-3xl h-12">
+          <LinearGradient
+            colors={["#b6a8ff", "#9486f0"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            className="rounded-3xl h-12 overflow-hidden w-1/2"
+          >
+            <Pressable
+              android_ripple={{ color: "#d3cfff" }}
+              className="w-full h-full flex items-center justify-center"
+              onPress={() => router.replace("/auth/login")}
+            >
+              <Text className="text-2xl text-white text-center">Login</Text>
+            </Pressable>
+          </LinearGradient>
+          <TouchableOpacity
+            className="flex-1"
+            onPress={() => router.replace("/auth/signup")}
+          >
+            <Text className="text-2xl text-white text-center">Signup</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <LinearGradient
+          colors={["#b6a8ff", "#9486f0"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          className="rounded-3xl h-12 overflow-hidden mt-6 w-1/2"
         >
-          <Text className="text-2xl text-white text-center">
-            {currentIndex === slides.length - 1 ? "Continue" : "Skip"}
-          </Text>
-        </Pressable>
-      </LinearGradient>
+          <Pressable
+            android_ripple={{ color: "#d3cfff" }}
+            className="w-full h-full flex items-center justify-center"
+            onPress={handleSkipOrContinue}
+          >
+            <Text className="text-2xl text-white text-center">Skip</Text>
+          </Pressable>
+        </LinearGradient>
+      )}
     </SafeAreaView>
   );
 };

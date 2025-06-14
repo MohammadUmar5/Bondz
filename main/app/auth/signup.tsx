@@ -1,7 +1,8 @@
 import { BasicWrapper, EmailSentModal } from "@/components";
+import { Colors } from "@/constants/Colors";
+import { useTheme } from "@/contexts/ThemeProvider";
 import { signUp } from "@/services/auth";
 import { Entypo } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -15,6 +16,7 @@ import {
 } from "react-native";
 
 const Signup = () => {
+  const { theme } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,90 +68,92 @@ const Signup = () => {
   };
 
   return (
-    <View>
+    <View className="flex-1 items-center justify-center p-6">
       {/* Header Text */}
-      <View className="w-full flex items-center mb-6">
-        <Text className="text-[#312170] font-semibold text-5xl">
-          Welcome! 🌱
+      <View className="w-full flex items-center">
+        <Text
+          style={{ color: Colors[theme].textPrimary }}
+          className="font-semibold text-5xl"
+        >
+          Welcome!
         </Text>
-        <Text className="text-[#312170] text-2xl mt-2 text-center">
-          Let's get ypu signed up
+        <Text
+          style={{ color: Colors[theme].textPrimary }}
+          className="text-xl mt-2 text-center opacity-50"
+        >
+          Let's get you signed up
         </Text>
       </View>
 
       {/* Inputs Container */}
-      <View
-        className="w-full h-80 rounded-3xl overflow-hidden mb-4"
-        style={{
-          backgroundColor: "rgba(255, 255, 255, 0.15)",
-          borderColor: "rgba(255, 255, 255, 0.3)",
-          borderWidth: 1,
-        }}
-      >
-        <BlurView
-          intensity={50}
-          tint="light"
-          className="flex-1 items-center justify-center px-6 py-6"
-        >
-          {/* Email */}
-          <Text className="self-start text-gray-700 text-base mb-1">Email</Text>
+      <View className="w-full mt-6 mb-4">
+        {/* Email */}
+        <Text className="self-start text-gray-500 text-base mb-1">Email</Text>
+        <TextInput
+          placeholder="Enter your email"
+          value={email}
+          onChangeText={setEmail}
+          placeholderTextColor="white"
+          keyboardType="email-address"
+          className="w-full placeholder:text-gray-400 text-xl bg-white/10 rounded-xl px-4 py-2 mb-4"
+          style={{ color: Colors[theme].textPrimary }}
+        />
+
+        {/* Password */}
+        <Text className="self-start text-gray-500 text-base mb-1">
+          Password
+        </Text>
+        <View className="w-full flex-row items-center bg-white/10 rounded-xl px-4">
           <TextInput
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
             placeholderTextColor="white"
-            className="w-full text-[#312170] placeholder:text-gray-300 text-xl bg-white/10 rounded-xl px-4 py-2 mb-4"
+            className="flex-1 placeholder:text-gray-400"
+            style={{ color: Colors[theme].textPrimary }}
+            secureTextEntry={!showPassword}
           />
-
-          {/* Password */}
-          <Text className="self-start text-gray-700 text-base mb-1">
-            Password
-          </Text>
-          <View className="w-full flex-row items-center bg-white/10 rounded-xl px-4 py-2">
-            <TextInput
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              placeholderTextColor="white"
-              className="flex-1 text-[#312170] placeholder:text-gray-300 text-xl"
-              secureTextEntry={!showPassword}
+          <Pressable onPress={() => setShowPassword(!showPassword)}>
+            <Entypo
+              name={showPassword ? "eye-with-line" : "eye"}
+              size={22}
+              color={Colors[theme].visibleIcon}
             />
-            <Pressable onPress={() => setShowPassword(!showPassword)}>
-              <Entypo
-                name={showPassword ? "eye-with-line" : "eye"}
-                size={22}
-                color="#312170"
-              />
-            </Pressable>
-          </View>
+          </Pressable>
+        </View>
 
-          {/* Confirm Password */}
-          <Text className="self-start text-gray-700 text-base mb-1">
-            Confirm Password
-          </Text>
-          <View className="w-full flex-row items-center bg-white/10 rounded-xl px-4 py-2">
-            <TextInput
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              placeholderTextColor="white"
-              className="flex-1 text-[#312170] placeholder:text-gray-300 text-xl"
-              secureTextEntry={!showPassword}
+        {/* Confirm Password */}
+        <Text className="self-start text-gray-500 text-base my-1">
+          Confirm Password
+        </Text>
+        <View className="w-full flex-row items-center bg-white/10 rounded-xl px-4">
+          <TextInput
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            placeholderTextColor="white"
+            className="flex-1 placeholder:text-gray-400"
+            style={{ color: Colors[theme].textPrimary }}
+            secureTextEntry={!showPassword}
+          />
+          <Pressable onPress={() => setShowPassword(!showPassword)}>
+            <Entypo
+              name={showPassword ? "eye-with-line" : "eye"}
+              size={22}
+              color={Colors[theme].visibleIcon}
             />
-            <Pressable onPress={() => setShowPassword(!showPassword)}>
-              <Entypo
-                name={showPassword ? "eye-with-line" : "eye"}
-                size={22}
-                color="#312170"
-              />
-            </Pressable>
-          </View>
-        </BlurView>
+          </Pressable>
+        </View>
       </View>
 
       {/* Feedback */}
       {feedback && (
-        <Text className="text-center mb-2 text-[#312170]">{feedback}</Text>
+        <Text
+          className="text-center mb-3 opacity-60"
+          style={{ color: Colors[theme].textPrimary }}
+        >
+          {feedback}
+        </Text>
       )}
 
       {/* Sign Up Button */}
@@ -157,7 +161,7 @@ const Signup = () => {
         colors={["#b6a8ff", "#9486f0"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="rounded-3xl w-full h-12 overflow-hidden"
+        className="rounded-3xl w-full h-12 overflow-hidden mt-2"
       >
         <Pressable
           android_ripple={{ color: "#d3cfff" }}
@@ -173,15 +177,25 @@ const Signup = () => {
       </LinearGradient>
 
       {/* Already Have an Account? Login Link */}
-      <View className="w-full flex flex-row items-center justify-center mt-6">
-        <Text className="text-[#312170cb]">Already have an account? </Text>
+      <View className="w-full flex flex-row items-center justify-center mt-4">
+        <Text
+          className="opacity-60"
+          style={{ color: Colors[theme].textPrimary }}
+        >
+          Already have an account?{" "}
+        </Text>
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
             router.replace("/auth/login");
           }}
         >
-          <Text className="text-[#312170]">Log In</Text>
+          <Text
+            className="opacity-85"
+            style={{ color: Colors[theme].textPrimary }}
+          >
+            Log In
+          </Text>
         </TouchableOpacity>
       </View>
 

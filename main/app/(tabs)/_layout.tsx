@@ -12,13 +12,6 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="home"
-        options={{
-          title: "Home",
-        }}
-      />
-
-      <Tabs.Screen
         name="echoes"
         options={{
           title: "Echoes",
@@ -33,9 +26,23 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="journal"
+        name="home"
         options={{
-          title: "Journal",
+          title: "Home",
+        }}
+      />
+
+      <Tabs.Screen
+        name="bonds"
+        options={{
+          title: "Bonds",
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
         }}
       />
     </Tabs>

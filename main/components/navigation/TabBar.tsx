@@ -1,15 +1,23 @@
 // components/TabBar.tsx
+import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { BlurView } from "expo-blur";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const icons: Record<string, keyof typeof Ionicons.glyphMap> = {
-  home: "home-outline",
-  echoes: "albums-outline",
-  memories: "images-outline",
-  profile: "person-outline",
+const iconMap: Record<
+  string,
+  {
+    filled: keyof typeof Ionicons.glyphMap;
+    outline: keyof typeof Ionicons.glyphMap;
+  }
+> = {
+  home: { filled: "home", outline: "home-outline" },
+  echoes: { filled: "albums", outline: "albums-outline" },
+  bonds: { filled: "people", outline: "people-outline" },
+  memories: { filled: "images", outline: "images-outline" },
+  profile: { filled: "person", outline: "person-outline" },
 };
 
 export default function TabBar({
@@ -18,59 +26,52 @@ export default function TabBar({
   navigation,
 }: BottomTabBarProps) {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
+
   return (
-    <View className="flex-row items-center justify-center absolute w-full bottom-0 right-0 mb-12">
-      <BlurView
-        intensity={50}
-        tint={theme === "cyber" ? "dark" : "light"}
-        style={styles.glassContainer}
-      >
-        <View className="flex-row w-full py-4 rounded-[120px]">
-          {/* <View className="absolute w-24 h-full rounded-[120px] bg-white"></View> */}
-          {state.routes.map((route, index) => {
-            const { options } = descriptors[route.key];
-            const label = options.title || route.name;
+    <View
+      className="flex-row w-full py-4 absolute border-t-2 border-white/10"
+      style={[
+        {
+          backgroundColor: Colors[theme].bg,
+          bottom: insets.bottom,
+        },
+      ]}
+    >
+      {/* <View className="absolute w-24 h-full rounded-[120px] bg-white"></View> */}
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label = options.title || route.name;
 
-            const isFocused = state.index === index;
+        const isFocused = state.index === index;
 
-            const onPress = () => {
-              if (!isFocused) {
-                navigation.navigate(route.name as never);
-              }
-            };
+        const onPress = () => {
+          if (!isFocused) {
+            navigation.navigate(route.name as never);
+          }
+        };
 
-            return (
-              <TouchableOpacity
-                key={route.key}
-                accessibilityRole="button"
-                activeOpacity={0.8}
-                accessibilityState={isFocused ? { selected: true } : {}}
-                onPress={onPress}
-                className="flex-1 flex-row items-center justify-center gap-2"
-              >
-                <Ionicons
-                  name={icons[route.name] || "ellipse-outline"}
-                  size={24}
-                  color={isFocused ? "#fff" : "#9CA3AF"}
-                  style={{
-                    marginLeft: isFocused && route.name === "home" ? 12 : 0,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: isFocused ? "#fff" : "#9CA3AF",
-                    display: isFocused ? "flex" : "none",
-                    fontSize: 14,
-                    marginRight: isFocused && route.name === "profile" ? 12 : 0,
-                  }}
-                >
-                  {label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </BlurView>
+        const icon =
+          iconMap[route.name]?.[isFocused ? "filled" : "outline"] ||
+          "ellipse-outline";
+
+        return (
+          <TouchableOpacity
+            key={route.key}
+            accessibilityRole="button"
+            activeOpacity={0.8}
+            accessibilityState={isFocused ? { selected: true } : {}}
+            onPress={onPress}
+            className="flex-1 flex-row items-center justify-center gap-2"
+          >
+            <Ionicons
+              name={icon}
+              size={24}
+              color={isFocused ? "#fff" : "#9CA3AF"}
+            />
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }

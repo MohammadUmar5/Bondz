@@ -1,14 +1,12 @@
 import React from "react";
 import {
-  View,
-  Text,
+  Dimensions,
   FlatList,
   Image,
-  Dimensions,
   Pressable,
+  Text,
+  View,
 } from "react-native";
-import { Feather } from '@expo/vector-icons';
-import { Colors } from "@/constants/Colors";
 
 const { width } = Dimensions.get("window");
 
@@ -18,7 +16,8 @@ export const mockMemories = [
     date: "9/4/2023",
     title: "Physics 140-1 Syllabus",
     subtitle: "Syllabus",
-    description: "Information about the Fall 2023 course taught by Pam Daniels, from phy140-1.pdf",
+    description:
+      "Information about the Fall 2023 course taught by Pam Daniels, from phy140-1.pdf",
     type: "document",
     bgColor: "#f8f9fa",
     textColor: "#333",
@@ -53,7 +52,8 @@ export const mockMemories = [
     date: "8/25/2023",
     title: "The Adventures of Saiki K.",
     subtitle: "TV Show",
-    description: "Your favorite anime about a psychic high school school student tries to live a normal life despite his abilities.",
+    description:
+      "Your favorite anime about a psychic high school school student tries to live a normal life despite his abilities.",
     type: "show",
     bgColor: "#e8f4f8",
     textColor: "#333",
@@ -64,7 +64,8 @@ export const mockMemories = [
     date: "8/25/2023",
     title: "Hyaluronic Acid",
     subtitle: "",
-    description: "A popular skincare ingredient that you've mentioned you are sensitive to and prefer to avoid.",
+    description:
+      "A popular skincare ingredient that you've mentioned you are sensitive to and prefer to avoid.",
     type: "note",
     bgColor: "#f0f8ff",
     textColor: "#333",
@@ -99,7 +100,8 @@ export const mockMemories = [
     date: "8/10/2023",
     title: "Study Notes",
     subtitle: "Notes",
-    description: "Important chemistry formulas and concepts for the upcoming exam.",
+    description:
+      "Important chemistry formulas and concepts for the upcoming exam.",
     type: "note",
     bgColor: "#fff8e1",
     textColor: "#333",
@@ -117,9 +119,15 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
   const CARD_WIDTH = (width - 48) / 2;
   const CARD_HEIGHT = 200;
 
-  const renderMemoryCard = ({ item, index }: { item: Memory; index: number }) => {
+  const renderMemoryCard = ({
+    item,
+    index,
+  }: {
+    item: Memory;
+    index: number;
+  }) => {
     const isLeft = index % 2 === 0;
-    
+
     return (
       <View
         style={{
@@ -131,12 +139,12 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
         {/* Background cards for layered effect */}
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 4,
             left: 2,
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
-            backgroundColor: '#ddd',
+            backgroundColor: "#ddd",
             borderRadius: 16,
             transform: [{ rotate: `${item.rotation + 1}deg` }],
             opacity: 0.3,
@@ -144,25 +152,25 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
         />
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 2,
             left: 1,
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
-            backgroundColor: '#bbb',
+            backgroundColor: "#bbb",
             borderRadius: 16,
             transform: [{ rotate: `${item.rotation + 0.5}deg` }],
             opacity: 0.2,
           }}
         />
-        
+
         {/* Main card */}
         <Pressable
           onPress={() => onMemoryPress(item, index)}
           style={{
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
-            backgroundColor: item.image ? '#000' : item.bgColor,
+            backgroundColor: item.image ? "#000" : item.bgColor,
             borderRadius: 16,
             padding: item.image ? 0 : 16,
             transform: [{ rotate: `${item.rotation}deg` }],
@@ -174,7 +182,7 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
             shadowOpacity: 0.15,
             shadowRadius: 8,
             elevation: 5,
-            overflow: 'hidden',
+            overflow: "hidden",
           }}
         >
           {item.image ? (
@@ -185,19 +193,19 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
                 style={{
                   width: "100%",
                   height: "100%",
-                  position: 'absolute',
+                  position: "absolute",
                 }}
                 resizeMode="cover"
               />
               {/* Glassmorphic overlay */}
               <View
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  backdropFilter: 'blur(20px)',
+                  backgroundColor: "rgba(255, 255, 255, 0.15)",
+                  backdropFilter: "blur(20px)",
                   padding: 12,
                   borderBottomLeftRadius: 16,
                   borderBottomRightRadius: 16,
@@ -206,7 +214,7 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
                 <Text
                   style={{
                     fontSize: 10,
-                    color: '#fff',
+                    color: "#fff",
                     opacity: 0.8,
                     marginBottom: 2,
                   }}
@@ -217,7 +225,7 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
                   style={{
                     fontSize: 14,
                     fontWeight: "600",
-                    color: '#fff',
+                    color: "#fff",
                     lineHeight: 16,
                   }}
                   numberOfLines={2}
@@ -238,7 +246,7 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
               >
                 {item.date}
               </Text>
-              
+
               <Text
                 style={{
                   fontSize: 16,
@@ -251,7 +259,7 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
               >
                 {item.title}
               </Text>
-              
+
               {item.subtitle && (
                 <Text
                   style={{
@@ -264,7 +272,7 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
                   {item.subtitle}
                 </Text>
               )}
-              
+
               {item.description && (
                 <Text
                   style={{
@@ -285,17 +293,7 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.default.bg }}>
-      {/* Header */}
-      <View style={{ paddingHorizontal: 0, paddingTop: 20, paddingBottom: 20 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-          <Feather name="search" size={22} color="#FFF" style={{ marginRight: 12 }} />
-          <Text style={{ fontSize: 24, fontWeight: '600', color: '#FFF' }}>
-            All Memories
-          </Text>
-        </View>
-      </View>
-
+    <>
       <FlatList
         data={mockMemories}
         numColumns={2}
@@ -306,10 +304,10 @@ export function MemoriesGrid({ onMemoryPress }: MemoriesGridProps) {
           paddingBottom: 20,
         }}
         columnWrapperStyle={{
-          justifyContent: 'space-between',
+          justifyContent: "space-between",
         }}
         renderItem={renderMemoryCard}
       />
-    </View>
+    </>
   );
 }

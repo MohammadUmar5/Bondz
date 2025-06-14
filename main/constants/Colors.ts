@@ -1,12 +1,13 @@
 export const Colors = {
   default: {
     accent: "#FF6F61",
-    bg: "#000",
+    bg: "#191a21",
     cardBg: "#1A1A24",
     textPrimary: "#FFFFFF",
     textSecondary: "#A0A0A8",
     tabBarColor: "#1F2937",
     tabBarBorderColor: "#374151",
+    visibleIcon: "#9ca3af",
   },
   cyber: {
     accent: "#ffffff",
@@ -16,5 +17,6 @@ export const Colors = {
     textSecondary: "#A0A0A8",
     tabBarColor: "#1F2937",
     tabBarBorderColor: "#374151",
+    visibleIcon: "#9ca3af",
   },
 };
