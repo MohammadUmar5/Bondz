@@ -21,9 +21,9 @@ const { width } = Dimensions.get('window');
 
 interface Props {
   challenge: ChallengeCard;
-  participationType: 'individual' | 'team';
   onSubmit: (submission: ChallengeSubmission) => void;
   onClose: () => void;
+  onNavigateToResponses: (challengeId: number) => void;
 }
 
 export interface ChallengeSubmission {
@@ -44,6 +44,8 @@ export interface ChallengeSubmission {
   shares: number;
   participationType: 'individual' | 'team';
 }
+
+type PageState = 'confirmation' | 'accepted' | 'submission';
 
 // Challenge theme configurations
 const getChallengeTheme = (challengeTitle: string) => {
@@ -100,12 +102,24 @@ const getChallengeTheme = (challengeTitle: string) => {
   }
 };
 
-export function ChallengeSubmissionPage({ challenge, participationType, onSubmit, onClose }: Props) {
+export function ChallengeParticipationFlow({ challenge, onSubmit, onClose, onNavigateToResponses }: Props) {
+  const [pageState, setPageState] = useState<PageState>('confirmation');
+  const [participationType, setParticipationType] = useState<'individual' | 'team' | null>(null);
   const [text, setText] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const theme = getChallengeTheme(challenge.title);
+
+  const handleParticipationChoice = (type: 'individual' | 'team') => {
+    setParticipationType(type);
+    setPageState('accepted');
+    
+    // Auto-advance to submission page after showing acceptance
+    setTimeout(() => {
+      setPageState('submission');
+    }, 2000);
+  };
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -171,13 +185,20 @@ export function ChallengeSubmissionPage({ challenge, participationType, onSubmit
         likes: 0,
         comments: 0,
         shares: 0,
-        participationType: participationType
+        participationType: participationType!
       };
 
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       onSubmit(submission);
-      Alert.alert('Success!', 'Your moment has been shared with the community! ✨');
-      onClose();
+      Alert.alert('Success!', 'Your moment has been shared with the community! ✨', [
+        {
+          text: 'View Responses',
+          onPress: () => {
+            onClose();
+            onNavigateToResponses(challenge.id);
+          }
+        }
+      ]);
     } catch (error) {
       Alert.alert('Error', 'Failed to submit your post. Please try again.');
     } finally {
@@ -185,6 +206,213 @@ export function ChallengeSubmissionPage({ challenge, participationType, onSubmit
     }
   };
 
+  // Confirmation Page
+  if (pageState === 'confirmation') {
+    return (
+      <View className="flex-1" style={{ backgroundColor: Colors.default.bg }}>
+        {/* Header */}
+        <View className="flex-row items-center justify-between px-4 py-3 pt-12">
+          <TouchableOpacity onPress={onClose} className="p-2">
+            <Ionicons name="close" size={24} color={Colors.default.textPrimary} />
+          </TouchableOpacity>
+          <Text className="text-lg font-semibold" style={{ color: Colors.default.textPrimary }}>
+            Join Challenge
+          </Text>
+          <TouchableOpacity onPress={() => onNavigateToResponses(challenge.id)} className="p-2">
+            <Ionicons name="people" size={24} color={Colors.default.textSecondary} />
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+          {/* Challenge Info */}
+          <View className="mx-4 mb-8">
+            <LinearGradient
+              colors={[challenge.gradient[0], challenge.gradient[1]]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              className="rounded-3xl p-6"
+            >
+              <View className="items-center">
+                <View 
+                  className="w-20 h-20 rounded-2xl items-center justify-center mb-4"
+                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+                >
+                  <Text style={{ fontSize: 40 }}>{challenge.image}</Text>
+                </View>
+                <Text className="text-white text-2xl font-bold text-center mb-2">
+                  {challenge.title}
+                </Text>
+                <Text className="text-white/90 text-base text-center">
+                  {challenge.subtitle}
+                </Text>
+              </View>
+            </LinearGradient>
+          </View>
+
+          {/* Participation Options */}
+          <View className="mx-4 mb-8">
+            <Text 
+              className="text-xl font-bold text-center mb-2"
+              style={{ color: Colors.default.textPrimary }}
+            >
+              How would you like to participate?
+            </Text>
+            <Text 
+              className="text-sm text-center mb-6"
+              style={{ color: Colors.default.textSecondary }}
+            >
+              Choose your preferred way to take on this challenge
+            </Text>
+
+            {/* Individual Option */}
+            <TouchableOpacity
+              onPress={() => handleParticipationChoice('individual')}
+              className="mb-4 p-6 rounded-2xl border-2"
+              style={{ 
+                backgroundColor: Colors.default.cardBg,
+                borderColor: Colors.default.textSecondary + '20'
+              }}
+            >
+              <View className="flex-row items-center">
+                <View 
+                  className="w-12 h-12 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: challenge.gradient[0] + '20' }}
+                >
+                  <Ionicons name="person" size={24} color={challenge.gradient[0]} />
+                </View>
+                <View className="flex-1">
+                  <Text 
+                    className="text-lg font-semibold mb-1"
+                    style={{ color: Colors.default.textPrimary }}
+                  >
+                    Individual Journey
+                  </Text>
+                  <Text 
+                    className="text-sm"
+                    style={{ color: Colors.default.textSecondary }}
+                  >
+                    Take on this challenge solo and share your personal experience
+                  </Text>
+                </View>
+                <Ionicons name="chevron-forward" size={20} color={Colors.default.textSecondary} />
+              </View>
+            </TouchableOpacity>
+
+            {/* Team Option */}
+            <TouchableOpacity
+              onPress={() => handleParticipationChoice('team')}
+              className="p-6 rounded-2xl border-2"
+              style={{ 
+                backgroundColor: Colors.default.cardBg,
+                borderColor: Colors.default.textSecondary + '20'
+              }}
+            >
+              <View className="flex-row items-center">
+                <View 
+                  className="w-12 h-12 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: challenge.gradient[1] + '20' }}
+                >
+                  <Ionicons name="people" size={24} color={challenge.gradient[1]} />
+                </View>
+                <View className="flex-1">
+                  <Text 
+                    className="text-lg font-semibold mb-1"
+                    style={{ color: Colors.default.textPrimary }}
+                  >
+                    Team Adventure
+                  </Text>
+                  <Text 
+                    className="text-sm"
+                    style={{ color: Colors.default.textSecondary }}
+                  >
+                    Join with friends or family and complete the challenge together
+                  </Text>
+                </View>
+                <Ionicons name="chevron-forward" size={20} color={Colors.default.textSecondary} />
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {/* Benefits */}
+          <View className="mx-4">
+            <View 
+              className="p-4 rounded-2xl"
+              style={{ backgroundColor: `${challenge.gradient[0]}10` }}
+            >
+              <Text 
+                className="text-sm font-medium mb-2 text-center"
+                style={{ color: challenge.gradient[0] }}
+              >
+                ✨ Challenge Benefits
+              </Text>
+              <Text 
+                className="text-xs text-center"
+                style={{ color: Colors.default.textSecondary }}
+              >
+                • Connect with like-minded community members{'\n'}
+                • Track your personal growth and progress{'\n'}
+                • Share meaningful moments and inspire others{'\n'}
+                • Earn recognition and build lasting bonds
+              </Text>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+
+  // Challenge Accepted Page
+  if (pageState === 'accepted') {
+    return (
+      <View className="flex-1" style={{ backgroundColor: Colors.default.bg }}>
+        <View className="flex-1 justify-center items-center">
+          <LinearGradient
+            colors={[challenge.gradient[0], challenge.gradient[1]]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            className="w-32 h-32 rounded-full items-center justify-center mb-8"
+          >
+            <Ionicons name="checkmark" size={60} color="white" />
+          </LinearGradient>
+
+          <Text 
+            className="text-3xl font-bold mb-4 text-center"
+            style={{ color: Colors.default.textPrimary }}
+          >
+            Challenge Accepted! 🎉
+          </Text>
+
+          <Text 
+            className="text-lg text-center mb-2"
+            style={{ color: Colors.default.textSecondary }}
+          >
+            {challenge.title}
+          </Text>
+
+          <Text 
+            className="text-sm text-center mb-8 capitalize"
+            style={{ color: challenge.gradient[0] }}
+          >
+            {participationType} participation
+          </Text>
+
+          <View 
+            className="mx-8 p-4 rounded-2xl"
+            style={{ backgroundColor: `${challenge.gradient[0]}15` }}
+          >
+            <Text 
+              className="text-sm text-center"
+              style={{ color: Colors.default.textSecondary }}
+            >
+              Get ready to share your journey with the community!
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // Themed Submission Page
   return (
     <KeyboardAvoidingView 
       className="flex-1" 

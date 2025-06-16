@@ -11,20 +11,21 @@ interface Props {
   currentChallengeIndex: number;
   onChallengePress: () => void;
   onIndexChange: (index: number) => void;
+  joinedChallenges: number[];
 }
 
 export function ChallengeCarousel({ 
   challengeCards, 
   currentChallengeIndex, 
   onChallengePress, 
-  onIndexChange 
+  onIndexChange,
+  joinedChallenges
 }: Props) {
   const flatListRef = useRef<FlatList>(null);
 
   const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
     if (viewableItems.length > 0) {
-      const index = viewableItems[0].index || 0;
-      onIndexChange(index);
+      onIndexChange(viewableItems[0].index);
     }
   }).current;
 
@@ -32,9 +33,16 @@ export function ChallengeCarousel({
     itemVisiblePercentThreshold: 50,
   };
 
-  const renderChallengeCard = ({ item }: { item: ChallengeCard }) => (
-    <LiquidGlassChallengeCard item={item} onPress={onChallengePress} />
-  );
+  const renderChallengeCard = ({ item }: { item: ChallengeCard }) => {
+    const isJoined = joinedChallenges.includes(item.id);
+    return (
+      <LiquidGlassChallengeCard 
+        item={item} 
+        onPress={onChallengePress}
+        isJoined={isJoined}
+      />
+    );
+  };
 
   return (
     <View>
