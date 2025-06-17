@@ -11,15 +11,21 @@ import { Colors } from "../../constants/Colors";
 import SocialPost from "@/components/bondzSpace/posts/SocialPost";
 import { mockPosts } from "../../data/mockPosts";
 import { ChallengeSection } from "../../components/bondzSpace/feed/challenges/ChallengeSection";
-import { ChallengeSubmissionPage, ChallengeSubmission } from "../../components/bondzSpace/feed/challenges/ChallengeSubmissionPage";
+import { ChallengeSubmission } from "../../components/bondzSpace/feed/challenges/ChallengeSubmissionPage";
 import { ChallengePost } from "../../components/bondzSpace/feed/challenges/ChallengePost";
 import { ChallengeCard } from "../../types/challenge";
 import { useState } from "react";
+import { ChallengeParticipationFlow } from "../../components/bondzSpace/feed/challenges/ChallengeParticipationFlow";
+import { ChallengeResponsesPage } from "../../components/bondzSpace/feed/challenges/ChallengeResponsesPage";
 
 function Echoes() {
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [selectedChallenge, setSelectedChallenge] = useState<ChallengeCard | null>(null);
   const [challengeSubmissions, setChallengeSubmissions] = useState<ChallengeSubmission[]>([]);
+  const [joinedChallenges, setJoinedChallenges] = useState<number[]>([]);
+  const [challengeResponses, setChallengeResponses] = useState<{ [challengeId: number]: ChallengeSubmission[] }>({});
+  const [showResponsesPage, setShowResponsesPage] = useState(false);
+  const [responsesChallenge, setResponsesChallenge] = useState<ChallengeCard | null>(null);
 
   const handleChallengePress = (challenge: ChallengeCard) => {
     setSelectedChallenge(challenge);
@@ -30,8 +36,25 @@ function Echoes() {
   };
 
   const handleSubmissionComplete = (submission: ChallengeSubmission) => {
-    setChallengeSubmissions(prev => [submission, ...prev]);
+    setChallengeResponses(prev => ({
+      ...prev,
+      [submission.challengeId]: [
+        ...(prev[submission.challengeId] || []),
+        submission
+      ]
+    }));
+    setJoinedChallenges(prev => prev.includes(submission.challengeId) ? prev : [...prev, submission.challengeId]);
     setSelectedChallenge(null);
+  };
+
+  const handleSeeMyResponses = (challenge: ChallengeCard) => {
+    setResponsesChallenge(challenge);
+    setShowResponsesPage(true);
+  };
+
+  const handleCreatePostFromResponses = () => {
+    setSelectedChallenge(responsesChallenge);
+    setShowResponsesPage(false);
   };
 
   const handleLike = () => {
@@ -94,7 +117,11 @@ function Echoes() {
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Challenge Section */}
-        <ChallengeSection onChallengePress={handleChallengePress} />
+        <ChallengeSection
+          onChallengePress={handleChallengePress}
+          joinedChallenges={joinedChallenges}
+          onSeeMyResponses={handleSeeMyResponses}
+        />
 
         {/* Posts Feed */}
         <View>
@@ -133,10 +160,29 @@ function Echoes() {
         presentationStyle="fullScreen"
       >
         {selectedChallenge && (
-          <ChallengeSubmissionPage
+          <ChallengeParticipationFlow
             challenge={selectedChallenge}
             onSubmit={handleSubmissionComplete}
             onClose={handleCloseSubmission}
+            onNavigateToResponses={() => {}} // implement if needed
+          />
+        )}
+      </Modal>
+
+      {/* Responses Modal */}
+      <Modal visible={showResponsesPage}>
+        {responsesChallenge && (
+          <ChallengeResponsesPage
+            challenge={responsesChallenge}
+            userResponses={challengeResponses[responsesChallenge.id] || []}
+            onCreatePost={handleCreatePostFromResponses}
+            title="My Responses"
+            onlyUser
+            onClose={() => setShowResponsesPage(false)}
+            onJoinChallenge={() => {
+              setShowResponsesPage(false);
+              setSelectedChallenge(responsesChallenge);
+            }}
           />
         )}
       </Modal>

@@ -10,9 +10,10 @@ const cardHeight = 180;
 interface Props {
   item: ChallengeCard;
   onPress: () => void;
+  isJoined?: boolean; // Add this prop
 }
 
-export function LiquidGlassChallengeCard({ item, onPress }: Props) {
+export function LiquidGlassChallengeCard({ item, onPress, isJoined = false }: Props) {
   // Create properly typed gradient arrays
   const mainGradientColors = [
     item.gradient[0],
@@ -99,23 +100,32 @@ export function LiquidGlassChallengeCard({ item, onPress }: Props) {
                 </Text>
               </View>
               
-              {/* Action button */}
+              {/* Action button - Make it clickable */}
               <TouchableOpacity
-                className="rounded-2xl px-6 py-3"
+                onPress={onPress}
+                className="rounded-2xl"
                 style={{ 
-                  backgroundColor: item.buttonBg,
+                  backgroundColor: item.buttonBg, // Always use the original button background
+                  paddingHorizontal: isJoined ? 16 : 20, // Slightly wider for "My Responses"
+                  paddingVertical: 10,
                   shadowColor: "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.25,
                   shadowRadius: 4,
-                  elevation: 5
+                  elevation: 5,
+                  minWidth: 98, // Ensure consistent minimum width
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 8,
                 }}
               >
                 <Text 
-                  className="font-bold text-sm"
-                  style={{ color: item.buttonTextColor }}
+                  className="font-bold text-xs"
+                  style={{ color: item.buttonTextColor }} // Always use the original button text color
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
                 >
-                  {item.buttonText}
+                  {isJoined ? 'My Responses' : item.buttonText}
                 </Text>
               </TouchableOpacity>
             </View>

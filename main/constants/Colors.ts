@@ -1,8 +1,8 @@
 export const Colors = {
   default: {
     accent: "#FF6F61",
-    bg: "#191a21",
-    cardBg: "#1A1A24",
+    bg: "#000",
+    cardBg: "#000",
     textPrimary: "#FFFFFF",
     textSecondary: "#A0A0A8",
     tabBarColor: "#1F2937",

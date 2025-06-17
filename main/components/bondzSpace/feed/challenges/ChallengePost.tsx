@@ -111,20 +111,7 @@ export function ChallengePost({ submission, onLike, onComment, onShare }: Props)
 
   return (
     <View className="mb-6">
-      {/* Challenge Badge - positioned above the post */}
-      <View className="px-4 mb-2">
-        <LinearGradient
-          colors={['#FF6B9D', '#8B5CF6']} // Default gradient, could be dynamic
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          className="px-3 py-1 rounded-full flex-row items-center self-start"
-        >
-          <Text style={{ fontSize: 12, marginRight: 4 }}>{submission.challengeIcon}</Text>
-          <Text className="text-white text-xs font-semibold">
-            {submission.challengeTitle}
-          </Text>
-        </LinearGradient>
-      </View>
+      {/* Remove the Challenge Badge section completely */}
 
       {/* Use the same components as SocialPost */}
       <PostHeader 
@@ -158,7 +145,7 @@ export function ChallengePost({ submission, onLike, onComment, onShare }: Props)
       />
 
       {/* Separator - same as SocialPost */}
-      <View className="h-px mx-4 mt-4" style={{ backgroundColor: Colors.default.textSecondary, opacity: 0.1 }} />
+      <View className="h-px mx-3 mt-6" style={{ backgroundColor: Colors.default.textSecondary, opacity: 0.2 }} />
     </View>
   );
 }
