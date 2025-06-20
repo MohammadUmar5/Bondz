@@ -48,6 +48,9 @@ export default {
       FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
       FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
       FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
+      eas: {
+        projectId: "d6ae379e-0d7e-451e-8789-f8c2b406a643",
+      },
     },
   },
 };
