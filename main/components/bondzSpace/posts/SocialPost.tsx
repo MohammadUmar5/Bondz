@@ -5,7 +5,6 @@ import PostHeader from './PostHeader';
 import PostContent from './PostContent';
 import PostImage from './PostImage';
 import PostActions from './PostActions';
-import PostEngagement from './PostEngagement';
 import CommentsModal from '../comments/CommentsModal';
 
 interface PostUser {
@@ -38,12 +37,11 @@ const SocialPost: React.FC<SocialPostProps> = ({ post }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
   const [showComments, setShowComments] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  
+
   const likeAnimation = useRef(new Animated.Value(1)).current;
   const heartAnimation = useRef(new Animated.Value(0)).current;
 
   const handleLike = () => {
-    // Animate the like button
     Animated.sequence([
       Animated.timing(likeAnimation, {
         toValue: 1.3,
@@ -57,7 +55,6 @@ const SocialPost: React.FC<SocialPostProps> = ({ post }) => {
       }),
     ]).start();
 
-    // Show floating heart if liking
     if (!isLiked) {
       Animated.sequence([
         Animated.timing(heartAnimation, {
@@ -97,7 +94,7 @@ const SocialPost: React.FC<SocialPostProps> = ({ post }) => {
 
   return (
     <View className="mb-6">
-      <PostHeader 
+      <PostHeader
         user={post.user}
         timestamp={post.timestamp}
         location={post.location}
@@ -106,13 +103,13 @@ const SocialPost: React.FC<SocialPostProps> = ({ post }) => {
 
       <PostContent content={post.content} />
 
-      <PostImage 
+      <PostImage
         image={post.image}
         onDoubleTab={handleDoubleTab}
         heartAnimation={heartAnimation}
       />
 
-      <PostActions 
+      <PostActions
         isLiked={isLiked}
         likesCount={likesCount}
         commentsCount={post.comments}
@@ -122,19 +119,12 @@ const SocialPost: React.FC<SocialPostProps> = ({ post }) => {
         likeAnimation={likeAnimation}
       />
 
-      <PostEngagement 
-        likesCount={likesCount}
-        commentsCount={post.comments}
-        onViewComments={handleViewComments}
-      />
-
-      <CommentsModal 
+      <CommentsModal
         visible={showComments}
         post={post}
         onClose={handleCloseComments}
       />
 
-      {/* Separator */}
       <View className="h-px mx-4 mt-4" style={{ backgroundColor: Colors.default.textSecondary, opacity: 0.1 }} />
     </View>
   );

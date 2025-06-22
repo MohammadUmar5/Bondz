@@ -5,7 +5,7 @@ export const mockPosts = [
       id: '1',
       username: 'sarah_mindful',
       displayName: 'Sarah Mitchell',
-      avatar: '🌸',
+      avatar: 'https://randomuser.me/api/portraits/women/1.jpg',
       isVerified: true
     },
     content: 'Just had the most incredible meditation session in my garden. The morning dew on the flowers reminded me how beautiful simple moments can be ✨🌿 #mindfulness #morningvibes',
@@ -23,7 +23,7 @@ export const mockPosts = [
       id: '2',
       username: 'alex_zen',
       displayName: 'Alex Chen',
-      avatar: '🧘‍♂️',
+      avatar: 'https://randomuser.me/api/portraits/men/2.jpg',
       isVerified: false
     },
     content: 'Found this peaceful corner in the local park today. Sometimes the best therapy is just sitting in nature and breathing deeply 🍃',
@@ -41,7 +41,7 @@ export const mockPosts = [
       id: '3',
       username: 'emma_light',
       displayName: 'Emma Rodriguez',
-      avatar: '✨',
+      avatar: 'https://randomuser.me/api/portraits/women/3.jpg',
       isVerified: true
     },
     content: 'Grateful for the small moments today. My morning coffee tasted extra special while watching the sunrise ☀️ What are you grateful for?',
@@ -59,7 +59,7 @@ export const mockPosts = [
       id: '4',
       username: 'mike_peaceful',
       displayName: 'Mike Johnson',
-      avatar: '🕊️',
+      avatar: 'https://randomuser.me/api/portraits/men/4.jpg',
       isVerified: false
     },
     content: 'Just finished my first 10-minute meditation streak! 🎉 Baby steps, but feeling more centered already. Thanks to this community for the inspiration 💙',
@@ -77,7 +77,7 @@ export const mockPosts = [
       id: '5',
       username: 'luna_dreams',
       displayName: 'Luna Marie',
-      avatar: '🌙',
+      avatar: 'https://randomuser.me/api/portraits/women/5.jpg',
       isVerified: true
     },
     content: 'Evening reflection: Today I chose kindness over being right in a difficult conversation. It felt so much better than winning an argument 💫',

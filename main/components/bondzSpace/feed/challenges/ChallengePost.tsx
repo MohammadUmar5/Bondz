@@ -13,7 +13,6 @@ import PostHeader from '../../posts/PostHeader';
 import PostContent from '../../posts/PostContent';
 import PostImage from '../../posts/PostImage';
 import PostActions from '../../posts/PostActions';
-import PostEngagement from '../../posts/PostEngagement';
 
 interface Props {
   submission: ChallengeSubmission;
@@ -136,12 +135,6 @@ export function ChallengePost({ submission, onLike, onComment, onShare }: Props)
         onLike={handleLike}
         onComments={handleViewComments}
         likeAnimation={likeAnimation}
-      />
-
-      <PostEngagement 
-        likesCount={likesCount}
-        commentsCount={submission.comments}
-        onViewComments={handleViewComments}
       />
 
       {/* Separator - same as SocialPost */}
