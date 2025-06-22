@@ -20,12 +20,12 @@ export default {
       playStoreUrl: "https://play.google.com/store/apps/details?id=com.bondz",
       adaptiveIcon: {
         foregroundImage: "./assets/logos/app_icon.png",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#000",
       },
       splash: {
-        image: "./assets/logos/app_icon.png",
+        image: "./assets/logos/splash_icon.gif",
         resizeMode: "contain",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#000",
       },
     },
 
@@ -49,7 +49,8 @@ export default {
       FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
       FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
       eas: {
-        projectId: "d6ae379e-0d7e-451e-8789-f8c2b406a643",
+        // projectId: "d6ae379e-0d7e-451e-8789-f8c2b406a643",
+        projectId: "c02cb612-a557-47d5-9a78-816a4a87740a",
       },
     },
   },
