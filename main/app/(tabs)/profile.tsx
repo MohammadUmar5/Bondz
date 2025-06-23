@@ -1,12 +1,19 @@
 import { BasicWrapper } from "@/components";
 import React from "react";
-import { Text, View } from "react-native";
+import { ScrollView } from "react-native";
+import ProfileHeader from "@/components/profile/ProfileHeader";
+import ProfileTabs from "@/components/profile/ProfileTabs";
 
 const Profile = () => {
   return (
-    <View>
-      <Text>Profile</Text>
-    </View>
+    <ScrollView 
+      style={{ flex: 1, backgroundColor: 'black' }}
+      showsVerticalScrollIndicator={false}
+      bounces={false}
+    >
+      <ProfileHeader />
+      <ProfileTabs />
+    </ScrollView>
   );
 };
 
