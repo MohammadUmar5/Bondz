@@ -36,7 +36,7 @@ export function ChallengeSection({
       {/* Section title */}
       <View className="px-4 mb-4">
         <Text 
-          className="text-2xl font-bold"
+          className="text-xl font-bold"
           style={{ color: Colors.default.textPrimary }}
         >
           Daily Challenges

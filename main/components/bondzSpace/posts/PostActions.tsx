@@ -34,7 +34,7 @@ const PostActions: React.FC<PostActionsProps> = ({
             />
           </Animated.View>
           <Text
-            className="ml-2 font-medium"
+            className="ml-1 mr-2 font-medium"
             style={{ color: Colors.default.textPrimary }}
           >
             {likesCount}
@@ -51,7 +51,7 @@ const PostActions: React.FC<PostActionsProps> = ({
             color={Colors.default.textPrimary}
           />
           <Text
-            className="ml-2 font-medium"
+            className="ml-1 mr-2 font-medium"
             style={{ color: Colors.default.textPrimary }}
           >
             {commentsCount}
@@ -65,7 +65,7 @@ const PostActions: React.FC<PostActionsProps> = ({
             color={Colors.default.textPrimary}
           />
           <Text
-            className="ml-2 font-medium"
+            className="ml-1 font-medium"
             style={{ color: Colors.default.textPrimary }}
           >
             {sharesCount}

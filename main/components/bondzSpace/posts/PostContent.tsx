@@ -9,7 +9,7 @@ interface PostContentProps {
 const PostContent: React.FC<PostContentProps> = ({ content }) => {
   return (
     <View className="px-4 mb-3">
-      <Text style={{ color: Colors.default.textPrimary }}>{content}</Text>
+      <Text style={{ color: Colors.default.textPrimary, fontSize: 13 }}>{content}</Text>
     </View>
   );
 };

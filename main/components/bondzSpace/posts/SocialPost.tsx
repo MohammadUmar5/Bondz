@@ -125,7 +125,7 @@ const SocialPost: React.FC<SocialPostProps> = ({ post }) => {
         onClose={handleCloseComments}
       />
 
-      <View className="h-px mx-4 mt-4" style={{ backgroundColor: Colors.default.textSecondary, opacity: 0.1 }} />
+      <View className="h-px mx-4 mt-4" style={{ backgroundColor: Colors.default.textSecondary, opacity: 0.2 }} />
     </View>
   );
 };

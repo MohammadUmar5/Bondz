@@ -17,8 +17,12 @@ import { ChallengeCard } from "../../types/challenge";
 import { useState } from "react";
 import { ChallengeParticipationFlow } from "../../components/bondzSpace/feed/challenges/ChallengeParticipationFlow";
 import { ChallengeResponsesPage } from "../../components/bondzSpace/feed/challenges/ChallengeResponsesPage";
+import ThreadCard from "../../components/bondzSpace/threads/ThreadCard";
+import { insertThreadsRandomly, isThread } from "../../components/bondzSpace/threads/threadUtils";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 function Echoes() {
+  const { theme } = useTheme();
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [selectedChallenge, setSelectedChallenge] = useState<ChallengeCard | null>(null);
   const [challengeSubmissions, setChallengeSubmissions] = useState<ChallengeSubmission[]>([]);
@@ -72,6 +76,31 @@ function Echoes() {
     console.log('Post shared');
   };
 
+  // Thread handlers
+  const handleJoinThread = (threadId: string) => {
+    console.log("Joining thread:", threadId);
+    // Implement join thread logic
+  };
+
+  const handleViewContributors = (threadId: string) => {
+    console.log("Viewing contributors for thread:", threadId);
+    // Implement view contributors logic
+  };
+
+  const handleThreadPress = (threadId: string) => {
+    console.log("Opening thread:", threadId);
+    // Navigate to thread detail page
+    // router.push(`/threads/${threadId}`);
+  };
+
+  // Create mixed feed with threads randomly inserted between posts
+  const createMixedFeed = () => {
+    const allPosts = [...challengeSubmissions, ...mockPosts];
+    return insertThreadsRandomly(allPosts);
+  };
+
+  const mixedFeed = createMixedFeed();
+
   return (
     <View className="flex-1" style={{ backgroundColor: Colors.default.bg }}>
       {/* Header */}
@@ -123,34 +152,40 @@ function Echoes() {
           onSeeMyResponses={handleSeeMyResponses}
         />
 
-        {/* Posts Feed */}
+        {/* Mixed Feed - Posts and Threads */}
         <View>
-          {/* Challenge Submissions First */}
-          {challengeSubmissions.map((submission) => (
-            <ChallengePost
-              key={submission.id}
-              submission={submission}
-              onLike={handleLike}
-              onComment={handleComment}
-              onShare={handleShare}
-            />
-          ))}
-
-          {/* Regular Posts */}
-          {mockPosts.map((post, index) => (
-            <SocialPost key={post.id} post={post as any} />
-          ))}
+          {mixedFeed.map((item, index) => {
+            if (isThread(item)) {
+              // Render ThreadCard
+              return (
+                <ThreadCard
+                  key={`thread-${item.id}`}
+                  thread={item}
+                  theme={theme}
+                  onJoin={handleJoinThread}
+                  onViewContributors={handleViewContributors}
+                  onThreadPress={handleThreadPress}
+                />
+              );
+            } else if ('challengeId' in item) {
+              // Render ChallengePost
+              return (
+                <ChallengePost
+                  key={`challenge-${item.id}`}
+                  submission={item as ChallengeSubmission}
+                  onLike={handleLike}
+                  onComment={handleComment}
+                  onShare={handleShare}
+                />
+              );
+            } else {
+              // Render Regular SocialPost
+              return (
+                <SocialPost key={`post-${item.id}`} post={item as any} />
+              );
+            }
+          })}
         </View>
-
-        {/* Load More */}
-        <TouchableOpacity
-          className="mx-4 my-6 p-4 rounded-2xl items-center"
-          style={{ backgroundColor: Colors.default.cardBg }}
-        >
-          <Text style={{ color: Colors.default.textSecondary }}>
-            🔄 Load more peaceful moments
-          </Text>
-        </TouchableOpacity>
       </ScrollView>
 
       {/* Challenge Submission Modal */}
